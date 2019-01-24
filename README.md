@@ -23,7 +23,7 @@ webperf
 The Web performace test.
 Examples of test configuration files are located under [webperf/google.conf]
 
-Check 'webperf.conf' for list of configuration options and their meaning.
+Check [webperf/webperf.conf] for list of configuration options and their meaning.
 
 parsing-server
 ---
@@ -42,6 +42,7 @@ Before compiling for MIPS, change OpenWRT build-root paths in main [Makefile].
 
 The binaries for webperf are located in webperf/x86 and webperf/mips, and for the playback server is located in playback/x86.
 
- [leone-webperf/testing/conf]:https://github.com/mboye/leone/tree/master/leone-webperf/testing/conf
- [Makefile]:https://github.com/mboye/leone/tree/master/Makefile
+ [webperf/webperf.conf]:https://github.com/alemnew/tree/master/webperf/webperf.conf
+ [webperf/google.conf]:https://github.com/alemnew/tree/master/webperf/google.conf
+ [Makefile]:https://github.com/alemnew/wepr/blobe/master/Makefile
 
