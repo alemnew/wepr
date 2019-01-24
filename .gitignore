@@ -1,0 +1,6 @@
+gtest-1.7.0
+x86
+mips
+/.project
+*.project
+*.cproject

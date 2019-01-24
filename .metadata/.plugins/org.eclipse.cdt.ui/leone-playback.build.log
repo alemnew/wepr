@@ -1,0 +1,13 @@
+17:14:10 **** Build of configuration Debug for project leone-playback ****
+make all 
+Building file: ../dns_server.c
+Invoking: Cross GCC Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"dns_server.d" -MT"dns_server.d" -o "dns_server.o" "../dns_server.c"
+../dns_server.c:6:25: fatal error: leone_tools.h: No such file or directory
+ #include "leone_tools.h"
+                         ^
+compilation terminated.
+make: *** [dns_server.o] Error 1
+
+17:14:10 Build Finished (took 216ms)
+

@@ -1,0 +1,180 @@
+#!/usr/bin/python
+import sys
+import BaseHTTPServer
+import subprocess
+from random import randint
+from SocketServer import ThreadingMixIn
+import threading
+import urlparse
+import os
+import httplib
+import errno
+import json
+import time
+import hashlib
+import ssl
+import code
+from aptdaemon.config import log
+import socket
+from mercurial import dirstate
+from debtagshw.debtagshw import LOG
+import Queue
+import multiprocessing 
+
+ 
+
+VERSION = 0.2
+
+HOST_NAME = '0.0.0.0'
+PORT_NUMBER = 2082
+DATA_STORE = '/home/parsing-server/data-store'
+SIG_KEY = open('auth.key').read()
+DELETE_HTML = True
+
+#define MAXSIZE for the queue
+URLQueue = multiprocessing.Queue()
+pathQueue = multiprocessing.Queue()
+jsonFnQueue = multiprocessing.Queue()
+
+
+class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def log_request(code, size):
+        pass
+    def do_HEAD(s):
+        s.send_response(200)
+        s.send_header("Content-type", ":q/html")
+        s.end_headers()
+    def do_POST(s):
+            request = {}
+            separator = "_"
+	    macAdd = ""
+            timeStamp = ""
+            remoteAddress = s.client_address[0]
+            log = "%s\t%s" % (time.asctime(), remoteAddress)
+           # print "clinet address is  " + remoteAddress
+            requestURL = urlparse.urlparse(s.path)
+            requestParameters = urlparse.parse_qs(requestURL.query)
+            if not "MAC" in requestParameters:
+                log += "MAC address missing"
+                print log
+                s.send_response(400)
+                # s.send_head("Content-Length", 0)
+                s.end_headers()
+                return
+            if not "TS" in requestParameters:
+                log += "Time stamp missing"
+                print log
+                s.send_response(400)
+                s.end_headers()
+                return 
+            if not "mainURL" in requestParameters:
+                log += "URL missing"
+                print log
+                s.send_response(400)
+                s.end_headers()
+                return            
+            timeStamp = requestParameters["TS"][0]
+            macAddress = requestParameters["MAC"][0]
+            url = requestParameters["mainURL"][0]
+            filename = macAddress + separator + timeStamp
+            line = ""
+           
+            '''
+               open a thread or subprocess that open a sockect connection
+               to the palyback sever and send url of body and json file to it
+               the play back server then do: 
+                   - accept this connectin in thread 
+                   - server them in separate thread 
+                   - if the connection is successful and the files are sent 
+                       then go to the next step ...
+           '''
+            homedir = os.environ['HOME']
+            directory = homedir + "/data-store/" + filename + "/"
+            jsonfn = directory + filename + ".json"
+            
+            URLQueue.put(url)
+            pathQueue.put(directory)
+            jsonFnQueue.put(jsonfn)
+                                 
+                                  
+        #    print "rendering request queued from client" + remoteAddress
+            
+            '''
+            read the output of the rendering process
+            store in the csv file...  
+            
+            '''
+
+            print filename 
+            s.send_response(200)  
+def myScheduler():
+    b = True
+    while b:
+        try:
+            while pathQueue.qsize() <= 0:
+                try:
+                    time.sleep(15)
+                except KeyboardInterrupt:
+                    b = False
+                    raise
+                    break
+                
+            directory = pathQueue.get()
+            jsonfn = jsonFnQueue.get()
+            url = URLQueue.get()
+                   
+            clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            clientsock.connect(('localhost', 2083))
+                
+            clientsock.sendall(directory) 
+            rcv = clientsock.recv(1024)
+             
+            clientsock.sendall(jsonfn)
+            rcv = clientsock.recv(1024)
+            
+            log = "body path and json filename are sent"
+            print log
+            
+            csvfn = jsonfn.replace(".json", ".csv")
+            
+            #for rendering vedio name
+            tmplist = jsonfn.split('/')
+            leng = len(tmplist)
+            vedioname = tmplist[leng-1].replace(".json","")
+            
+             
+            renderProcess = subprocess.Popen(['./rendering-time.sh', url, csvfn, vedioname], 
+                                                 stdout=subprocess.PIPE)
+            
+            time.sleep(35)
+        except KeyboardInterrupt:
+            b = False
+            raise
+            pass
+
+
+
+class ThreadedHTTPServer(ThreadingMixIn, BaseHTTPServer.HTTPServer):
+        """Handle requests in a separate thread."""
+
+if __name__ == '__main__':
+    server_class = ThreadedHTTPServer
+    httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
+    httpd.socket = ssl.wrap_socket(httpd.socket, certfile='leone-ssl.pem', server_side=True)
+    print "LEONE rendering server"
+    
+    renderingSched = multiprocessing.Process(name = "scheduler", target=myScheduler)
+    try:
+        renderingSched.start()
+    except KeyboardInterrupt:
+        renderingSched.terminate()
+        pass
+    
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+       pass
+    httpd.server_close()
+    print "Sever closed. "
+                
+            

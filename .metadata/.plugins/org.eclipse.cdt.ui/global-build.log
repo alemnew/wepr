@@ -1,0 +1,22 @@
+10:26:41 **** Incremental Build of configuration Debug for project Test ****
+make all 
+Building file: ../pointer.c
+Invoking: Cross GCC Compiler
+gcc -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"pointer.d" -MT"pointer.d" -o "pointer.o" "../pointer.c"
+../pointer.c: In function ‘pmain’:
+../pointer.c:10:2: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘int *’ [-Wformat=]
+  printf("value: %x\n", ip);
+  ^
+../pointer.c:11:2: warning: format ‘%x’ expects argument of type ‘unsigned int’, but argument 2 has type ‘int *’ [-Wformat=]
+  printf("value: %x\n", &var);
+  ^
+../pointer.c:14:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+Finished building: ../pointer.c
+ 
+Building target: Test
+Invoking: Cross GCC Linker
+gcc  -o "Test"  ./pointer.o ./server.o ./test.o   
+Finished building target: Test
+ 

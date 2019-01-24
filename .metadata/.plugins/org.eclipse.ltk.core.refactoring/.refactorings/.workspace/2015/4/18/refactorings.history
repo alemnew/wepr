@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete 10 resources" deleteContents="false" description="Delete 10 resources" element1="/leone-dns-library" element10="/Test" element2="/leone-playback" element3="/leone-render-hp" element4="/leone-tools" element5="/leone-webperf" element6="/leone-wpz" element7="/libhurl" element8="/rendering" element9="/save-body" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="10" stamp="1430134079800"/>
+</session>
