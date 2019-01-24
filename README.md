@@ -2,26 +2,26 @@ hurl
 ---
 hURL is a multi-threaded HTTP client which supports persistent connections and request pipelining.
 
-leone-dns-library
+dns-library
 ---
 Library for DNS resolution
 
-leone-playback
+playback
 ---
 DNS and HTTP server designed to emulate performance recorded by the Webperf test.
 
-leone-render
+rendering-server
 ---
-Rendering performance tests.
+Calcualtes the rendering time of a website.
 
-leone-tools
+tools
 ---
 Library containing shared functions.
 
-leone-webperf
+webperf
 ---
-The actual Webperf test.
-Examples of test configuration files are located under [leone-webperf/testing/conf]
+The Web performace test.
+Examples of test configuration files are located under [webperf/google.conf]
 
 Check 'webperf.conf' for list of configuration options and their meaning.
 
@@ -29,13 +29,6 @@ parsing-server
 ---
 Parsing server that turns HTML files into a list of files that must be downloaded in order to render a webpage.
 
-sk-deploy
----
-Scripts and binaries for deployment of Webperf test on SamKnows infrastructure
-
-webperf-paco
----
-Scripts and binaries for deployment of Webperf test on Paco's testbed.
 
 
 How to build
@@ -47,9 +40,7 @@ Before compiling for MIPS, change OpenWRT build-root paths in main [Makefile].
     make mips
 ```
 
-The binaries are located in leone-webperf/x86 and leone-webperf/mips
-
-
+The binaries for webperf are located in webperf/x86 and webperf/mips, and for the playback server is located in playback/x86.
 
  [leone-webperf/testing/conf]:https://github.com/mboye/leone/tree/master/leone-webperf/testing/conf
  [Makefile]:https://github.com/mboye/leone/tree/master/Makefile
