@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;leone-playback/https_server.c&apos; to &apos;https_server.ccc&apos;" description="Rename resource &apos;https_server.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="https_server.c" name="https_server.ccc" stamp="1422640297675" updateReferences="true"/>
-</session>

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;save-body/save_body&apos; to &apos;save_body.h&apos;" description="Rename resource &apos;save_body&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="save_body" name="save_body.h" stamp="1422450401317" updateReferences="true"/>
-</session>
